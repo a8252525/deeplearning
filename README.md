@@ -1,1 +1,2 @@
-Record of deep learing course in 
+Record of deep learning course in National Chiao Tung University
+
