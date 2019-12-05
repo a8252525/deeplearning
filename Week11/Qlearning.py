@@ -6,8 +6,12 @@ import gym
 import math
 import numpy as np
 from numpy import argmax
+import time
+from time import sleep
 e_greedy = 0.3
 lr = 0.99
+Render = False
+
 
 def choose_action(state, q_table, action_space, e_greedy):
     if  random() < e_greedy:
@@ -44,7 +48,7 @@ state_bounds[3] = [-math.radians(50), math.radians(50)]
 q_table = np.zeros(n_buckets + (n_actions,))
 
 for i_episode in range(200):
-    
+    if i_episode >195: Render = True
     e_greedy = get_epsilon(i_episode)
     lr = get_lr(i_episode)
     
@@ -53,7 +57,7 @@ for i_episode in range(200):
     reward = 0
     state = get_state(observation, n_buckets, state_bounds)
     for t in range(250):
-        env.render()
+        if Render: env.render()
         #print(observation)
         action = choose_action(state, q_table, env.action_space, e_greedy)
         observation, reward, done, info = env.step(action)
@@ -65,6 +69,7 @@ for i_episode in range(200):
         q_table[state + (action,)] += lr * (reward + gamma * q_next_max - q_table[state + (action,)]) # 就是那個公式
         
         state = next_state
+        if Render : sleep(1/30)
         if done:
             print("Episode finished after {} timesteps".format(t+1))
             break
