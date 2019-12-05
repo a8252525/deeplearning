@@ -32,6 +32,8 @@ def get_state(observation, n_buckets, state_bounds):
     return tuple(state)        
 
 env = gym.make('CartPole-v0')
+env._max_episode_steps = 4000
+
 
 get_epsilon = lambda i: max(0.01, min(1, 1.0 - math.log10((i+1)/25)))  # epsilon-greedy; 隨時間遞減
 get_lr = lambda i: max(0.01, min(0.5, 1.0 - math.log10((i+1)/25))) # learning rate; 隨時間遞減 
@@ -47,8 +49,8 @@ state_bounds[3] = [-math.radians(50), math.radians(50)]
 
 q_table = np.zeros(n_buckets + (n_actions,))
 
-for i_episode in range(200):
-    if i_episode >195: Render = True
+for i_episode in range(400):
+    if i_episode >395: Render = True
     e_greedy = get_epsilon(i_episode)
     lr = get_lr(i_episode)
     
@@ -56,7 +58,7 @@ for i_episode in range(200):
     observation = env.reset()
     reward = 0
     state = get_state(observation, n_buckets, state_bounds)
-    for t in range(250):
+    for t in range(50000):
         if Render: env.render()
         #print(observation)
         action = choose_action(state, q_table, env.action_space, e_greedy)
@@ -69,7 +71,7 @@ for i_episode in range(200):
         q_table[state + (action,)] += lr * (reward + gamma * q_next_max - q_table[state + (action,)]) # 就是那個公式
         
         state = next_state
-        if Render : sleep(1/30)
+        if Render : sleep(1/15)
         if done:
             print("Episode finished after {} timesteps".format(t+1))
             break
