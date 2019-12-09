@@ -1,4 +1,5 @@
-
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 #參考（複製）：https://medium.com/pyladies-taiwan/reinforcement-learning-%E5%81%A5%E8%BA%AB%E6%88%BF-openai-gym-e2ad99311efc
 
 from random import randint, random, shuffle, choice
